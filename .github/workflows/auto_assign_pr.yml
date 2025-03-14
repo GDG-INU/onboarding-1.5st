@@ -12,5 +12,5 @@ jobs:
       - name: 'Assign reviewers to PR'
         uses: reviewpad/action-assign-reviewers@v1.3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.TOKEN }}
           reviewers: jang-namu, gisu1102
