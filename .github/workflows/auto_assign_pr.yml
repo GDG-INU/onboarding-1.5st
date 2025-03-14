@@ -1,0 +1,16 @@
+name: PR Review Assignment
+on:
+  pull_request:
+    types: [opened, ready_for_review, reopened]
+
+jobs:
+  assign-reviewers:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: 'Assign reviewers to PR'
+        uses: reviewpad/action-assign-reviewers@v1.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: jang-namu, gisu1102
