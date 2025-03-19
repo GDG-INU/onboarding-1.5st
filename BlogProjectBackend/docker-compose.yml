@@ -9,6 +9,8 @@ services:    # 컨테이너 정의(컨테이너의 집합체를 보주로 서비
       MYSQL_PASSWORD: 1234
     ports:
       - "3307:3306"
+    volumes:
+      - ./mysql-config/my.cnf:/etc/mysql/conf.d/my.cnf  # 설정 파일 마운트
   app:
     build: .
     container_name: spring-app
