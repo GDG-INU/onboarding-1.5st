@@ -33,6 +33,9 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'junit', module: 'junit' // JUnit 4 제외
 		exclude group: 'org.mockito', module: 'mockito-core' // Mockito Core 제거
@@ -41,12 +44,9 @@ dependencies {
 	testImplementation 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.mysql:mysql-connector-j'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 }
