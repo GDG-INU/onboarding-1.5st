@@ -20,13 +20,11 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
-
         this.authenticationConfiguration = authenticationConfiguration;
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-
         return configuration.getAuthenticationManager();
     }
 
