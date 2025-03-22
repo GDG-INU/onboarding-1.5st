@@ -1,5 +1,6 @@
 package com.onboardingbackend.BlogProjectBackend.config;
 
+import com.onboardingbackend.BlogProjectBackend.jwt.JWTFilter;
 import com.onboardingbackend.BlogProjectBackend.jwt.JWTUtil;
 import com.onboardingbackend.BlogProjectBackend.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
@@ -55,6 +56,8 @@ public class SecurityConfig {
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil),LoginFilter.class);
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
         http
