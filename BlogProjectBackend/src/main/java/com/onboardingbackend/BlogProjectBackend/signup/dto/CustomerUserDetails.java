@@ -1,12 +1,11 @@
-package com.onboardingbackend.BlogProjectBackend.dto;
+package com.onboardingbackend.BlogProjectBackend.signup.dto;
 
-import com.onboardingbackend.BlogProjectBackend.entity.UserEntity;
+import com.onboardingbackend.BlogProjectBackend.signup.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class CustomerUserDetails implements UserDetails {
     private final UserEntity userEntity;

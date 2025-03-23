@@ -1,4 +1,4 @@
-package com.onboardingbackend.BlogProjectBackend.dto;
+package com.onboardingbackend.BlogProjectBackend.signup.dto;
 
 import lombok.Getter;
 import lombok.Setter;

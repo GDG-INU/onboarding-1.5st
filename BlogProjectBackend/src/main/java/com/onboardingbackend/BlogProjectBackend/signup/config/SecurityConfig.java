@@ -1,8 +1,8 @@
-package com.onboardingbackend.BlogProjectBackend.config;
+package com.onboardingbackend.BlogProjectBackend.signup.config;
 
-import com.onboardingbackend.BlogProjectBackend.jwt.JWTFilter;
-import com.onboardingbackend.BlogProjectBackend.jwt.JWTUtil;
-import com.onboardingbackend.BlogProjectBackend.jwt.LoginFilter;
+import com.onboardingbackend.BlogProjectBackend.signup.jwt.JWTFilter;
+import com.onboardingbackend.BlogProjectBackend.signup.jwt.JWTUtil;
+import com.onboardingbackend.BlogProjectBackend.signup.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -42,13 +41,9 @@ public class SecurityConfig {
 
         //csrf disable
         http
-                .csrf((auth) ->auth.disable());
-
-        http
-                .formLogin((auth) ->auth.disable());
-
-        http
-                .httpBasic((auth) ->auth.disable());
+                .csrf((auth) ->auth.disable())
+                .formLogin((auth) ->auth.disable())
+                .httpBasic((auth) ->auth.disable()); //체이닝 적용
 
         http
                 .authorizeHttpRequests((auth)->auth

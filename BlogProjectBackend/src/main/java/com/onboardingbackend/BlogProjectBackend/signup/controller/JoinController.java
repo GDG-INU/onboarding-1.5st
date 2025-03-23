@@ -1,12 +1,10 @@
-package com.onboardingbackend.BlogProjectBackend.controller;
+package com.onboardingbackend.BlogProjectBackend.signup.controller;
 
-import com.onboardingbackend.BlogProjectBackend.dto.JoinDTO;
-import com.onboardingbackend.BlogProjectBackend.service.JoinService;
-import org.hibernate.mapping.Join;
+import com.onboardingbackend.BlogProjectBackend.signup.dto.JoinDTO;
+import com.onboardingbackend.BlogProjectBackend.signup.service.JoinService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller

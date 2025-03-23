@@ -1,12 +1,11 @@
-package com.onboardingbackend.BlogProjectBackend.jwt;
+package com.onboardingbackend.BlogProjectBackend.signup.jwt;
 
-import com.onboardingbackend.BlogProjectBackend.dto.CustomerUserDetails;
-import com.onboardingbackend.BlogProjectBackend.entity.UserEntity;
+import com.onboardingbackend.BlogProjectBackend.signup.dto.CustomerUserDetails;
+import com.onboardingbackend.BlogProjectBackend.signup.entity.UserEntity;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
