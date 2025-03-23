@@ -25,7 +25,6 @@ public class JoinService {
         String email=joinDTO.getEmail();
         String password=joinDTO.getPassword();
 
-
         if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
