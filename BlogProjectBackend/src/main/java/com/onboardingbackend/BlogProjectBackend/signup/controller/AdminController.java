@@ -1,4 +1,4 @@
-package com.onboardingbackend.BlogProjectBackend.controller;
+package com.onboardingbackend.BlogProjectBackend.signup.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.onboardingbackend.BlogProjectBackend.jwt;
+package com.onboardingbackend.BlogProjectBackend.signup.jwt;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;

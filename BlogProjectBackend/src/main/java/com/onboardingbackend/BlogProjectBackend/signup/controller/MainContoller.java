@@ -1,4 +1,4 @@
-package com.onboardingbackend.BlogProjectBackend.controller;
+package com.onboardingbackend.BlogProjectBackend.signup.controller;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

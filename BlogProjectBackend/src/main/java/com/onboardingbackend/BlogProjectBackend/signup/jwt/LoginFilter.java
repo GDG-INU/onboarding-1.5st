@@ -1,10 +1,9 @@
-package com.onboardingbackend.BlogProjectBackend.jwt;
+package com.onboardingbackend.BlogProjectBackend.signup.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.onboardingbackend.BlogProjectBackend.dto.CustomerUserDetails;
-import com.onboardingbackend.BlogProjectBackend.dto.LoginRequestDTO;
+import com.onboardingbackend.BlogProjectBackend.signup.dto.CustomerUserDetails;
+import com.onboardingbackend.BlogProjectBackend.signup.dto.LoginRequestDTO;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,9 +1,8 @@
-package com.onboardingbackend.BlogProjectBackend.service;
+package com.onboardingbackend.BlogProjectBackend.signup.service;
 
-import com.onboardingbackend.BlogProjectBackend.dto.CustomerUserDetails;
-import com.onboardingbackend.BlogProjectBackend.entity.UserEntity;
-import com.onboardingbackend.BlogProjectBackend.repository.UserRepository;
-import org.springframework.security.core.userdetails.User;
+import com.onboardingbackend.BlogProjectBackend.signup.dto.CustomerUserDetails;
+import com.onboardingbackend.BlogProjectBackend.signup.entity.UserEntity;
+import com.onboardingbackend.BlogProjectBackend.signup.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

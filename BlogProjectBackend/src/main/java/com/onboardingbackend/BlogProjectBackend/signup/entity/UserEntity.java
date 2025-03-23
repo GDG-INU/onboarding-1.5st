@@ -1,4 +1,4 @@
-package com.onboardingbackend.BlogProjectBackend.entity;
+package com.onboardingbackend.BlogProjectBackend.signup.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

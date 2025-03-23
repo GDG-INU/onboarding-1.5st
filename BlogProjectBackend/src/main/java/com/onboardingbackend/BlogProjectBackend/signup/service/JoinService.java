@@ -1,8 +1,8 @@
-package com.onboardingbackend.BlogProjectBackend.service;
+package com.onboardingbackend.BlogProjectBackend.signup.service;
 
-import com.onboardingbackend.BlogProjectBackend.dto.JoinDTO;
-import com.onboardingbackend.BlogProjectBackend.entity.UserEntity;
-import com.onboardingbackend.BlogProjectBackend.repository.UserRepository;
+import com.onboardingbackend.BlogProjectBackend.signup.dto.JoinDTO;
+import com.onboardingbackend.BlogProjectBackend.signup.entity.UserEntity;
+import com.onboardingbackend.BlogProjectBackend.signup.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
