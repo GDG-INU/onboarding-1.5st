@@ -11,7 +11,6 @@ import java.util.Map;
 
 
 @RestController//RestController 적용
-
 public class AdminController {
 
     @GetMapping("/admin")

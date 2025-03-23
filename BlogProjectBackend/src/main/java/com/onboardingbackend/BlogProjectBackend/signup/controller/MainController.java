@@ -17,6 +17,8 @@ import java.util.Map;
 @ResponseBody
 public class MainController {
 
+
+
     @GetMapping("/")
     public ResponseEntity<Map<String, String>> mainP(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
