@@ -1,4 +1,4 @@
-package com.onboardingbackend.BlogProjectBackend.signup.config;
+package com.onboardingbackend.BlogProjectBackend.config;
 
 import com.onboardingbackend.BlogProjectBackend.signup.jwt.JWTFilter;
 import com.onboardingbackend.BlogProjectBackend.signup.jwt.JWTUtil;
@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -47,7 +48,6 @@ public class SecurityConfig {
                 .csrf((auth) ->auth.disable())
                 .formLogin((auth) ->auth.disable())
                 .httpBasic((auth) ->auth.disable()); //체이닝 적용
-
 
         http
                 .authorizeHttpRequests((auth)->auth

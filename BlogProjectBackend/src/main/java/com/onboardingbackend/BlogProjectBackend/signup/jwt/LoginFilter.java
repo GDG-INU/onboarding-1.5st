@@ -1,4 +1,4 @@
-package com.onboardingbackend.BlogProjectBackend.signup.jwt;
+package com.onboardingbackend.BlogProjectBackend.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onboardingbackend.BlogProjectBackend.signup.dto.CustomerUserDetails;
