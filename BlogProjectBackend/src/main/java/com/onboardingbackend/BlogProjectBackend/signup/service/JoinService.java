@@ -25,7 +25,7 @@ public class JoinService {
         Boolean isExist=userRepository.existsByUsername(username);
 
         if(isExist){
-            return;
+            throw new IllegalArgumentException("이미 존재하는 사용자입니다."); //의미상 예외 지정
         }
         UserEntity data=new UserEntity();
         data.setUsername(username);

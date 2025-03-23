@@ -2,13 +2,14 @@ package com.onboardingbackend.BlogProjectBackend.signup.controller;
 
 import com.onboardingbackend.BlogProjectBackend.signup.dto.JoinDTO;
 import com.onboardingbackend.BlogProjectBackend.signup.service.JoinService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@ResponseBody
+@Slf4j   //System.out.println은 느림
+@RestController  //RestController로 변경
 public class JoinController {
 
     private  final JoinService joinService;
@@ -19,7 +20,7 @@ public class JoinController {
 
     @PostMapping("/join")
     public String joinProcess(@RequestBody JoinDTO joinDTO){
-        System.out.println("요청 데이터: " + joinDTO);
+        log.info("요청 데이터: {}", joinDTO);
         joinService.joinProcess(joinDTO);
         return "ok";
     }

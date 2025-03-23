@@ -1,5 +1,5 @@
-# 1️⃣ Java 21을 지원하는 OpenJDK 기반 이미지 사용
-FROM eclipse-temurin:21-jdk AS runtime
+# 1️⃣ //JRE 기반 이미지”**만 있어도 실행은 충분
+FROM eclipse-temurin:21-jre
 
 # 2️⃣ 작업 디렉토리 설정
 WORKDIR /app

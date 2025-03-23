@@ -1,5 +1,6 @@
 package com.onboardingbackend.BlogProjectBackend.signup.jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,13 +18,13 @@ public class JWTUtil {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
     public String getUsername(String token){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
+        return extractClaims(token).get("username", String.class);
     }
     public String getRole(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
+        return extractClaims(token).get("role", String.class);
     }
     public Boolean isExpired(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        return extractClaims(token).getExpiration().before(new Date());
     }
 
     public String createJwt(String username, String role, Long expiredMs) {
@@ -36,4 +37,12 @@ public class JWTUtil {
                 .signWith(secretKey)
                 .compact();
     }
+
+    private Claims extractClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    } //하나의 메서드로 통일
 }
