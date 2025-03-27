@@ -1,5 +1,6 @@
 // src/pages/Login.jsx
 import Footer from '../components/Footer';
+import { Link } from 'react-router-dom';
 
 function Login() {
   return (
@@ -54,6 +55,16 @@ function Login() {
                 Submit
               </button>
             </form>
+
+            <p className="text-sm text-gray-500 text-center">
+              Don't have an account?{' '}
+              <Link
+                to="/signup"
+                className="text-black font-semibold underline hover:text-gray-800"
+              >
+                Sign up
+              </Link>
+            </p>
           </div>
         </div>
       </main>
