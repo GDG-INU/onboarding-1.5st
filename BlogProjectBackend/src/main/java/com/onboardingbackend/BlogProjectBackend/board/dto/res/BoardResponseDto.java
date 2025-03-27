@@ -1,14 +1,11 @@
 package com.onboardingbackend.BlogProjectBackend.board.dto.res;
 import com.onboardingbackend.BlogProjectBackend.board.entity.Board;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 public class BoardResponseDto {
-    private String message;
-
     private final Integer id;
     private final String title;
     private final String content;

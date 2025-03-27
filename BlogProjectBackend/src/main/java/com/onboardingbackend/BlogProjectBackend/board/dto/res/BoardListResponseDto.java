@@ -2,7 +2,6 @@ package com.onboardingbackend.BlogProjectBackend.board.dto.res;
 
 import com.onboardingbackend.BlogProjectBackend.board.entity.Board;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Data
