@@ -3,9 +3,9 @@ spring:
     secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/onboarding}
-    username: root
-    password: ${SPRING_DATASOURCE_PASSWORD:1234}
+    url: jdbc:mysql://localhost:3307/onboarding
+    username: user
+    password: 1234
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
