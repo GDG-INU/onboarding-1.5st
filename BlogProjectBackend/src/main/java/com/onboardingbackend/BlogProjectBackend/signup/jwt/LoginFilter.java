@@ -3,6 +3,8 @@ package com.onboardingbackend.BlogProjectBackend.signup.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onboardingbackend.BlogProjectBackend.signup.dto.CustomerUserDetails;
 import com.onboardingbackend.BlogProjectBackend.signup.dto.LoginRequestDTO;
+import com.onboardingbackend.BlogProjectBackend.signup.entity.RefreshToken;
+import com.onboardingbackend.BlogProjectBackend.signup.service.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,10 +22,12 @@ import java.util.Iterator;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
+    private final RefreshTokenService refreshTokenService;
 
-    public LoginFilter(AuthenticationManager authenticationManager,JWTUtil jwtUtil){
+    public LoginFilter(AuthenticationManager authenticationManager,JWTUtil jwtUtil,RefreshTokenService refreshTokenService){
         this.authenticationManager=authenticationManager;
-        this.jwtUtil=jwtUtil;
+          this.jwtUtil=jwtUtil;
+          this.refreshTokenService=refreshTokenService;
     }
 
     @Override
@@ -57,6 +61,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         CustomerUserDetails customerUserDetails=(CustomerUserDetails) authentication.getPrincipal();
 
         String username=customerUserDetails.getUsername();
+        Integer userID= customerUserDetails.getUserID();
 
         Collection<? extends GrantedAuthority> authorities=authentication.getAuthorities();
         Iterator<? extends  GrantedAuthority> iterator=authorities.iterator();
@@ -64,9 +69,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role=auth.getAuthority();
 
-        String token=jwtUtil.createJwt(username,role,60*60*10L);
+        String token=jwtUtil.createJwt(username,role,60*60*100L);
+        RefreshToken refreshToken = refreshTokenService.createorUpdateRefreshToken(userID);
+
 
         response.addHeader("Authorization","Bearer "+ token);
+        response.addHeader("Refresh-Token", refreshToken.getToken());
     }
 
     @Override
