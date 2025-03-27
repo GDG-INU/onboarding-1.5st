@@ -34,11 +34,25 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 	//implementation 'com.mysql:mysql-connector-j:8.3.0'
+
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+	// ✅ Spring Boot Test (JUnit 4 제거)
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'junit', module: 'junit'
+	}
+	testImplementation 'com.h2database:h2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'       //implementation:빌드 시에도 클래스/기능이 필요할 때  runtimeOnly:실행 시만 필요할 때 (ex. JDBC 드라이버, DB 커넥터 등)
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test'){
+		exclude group: 'org.mockito', module: 'mockito-core'
+	}
+	testImplementation 'org.mockito:mockito-inline:5.2.0'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
