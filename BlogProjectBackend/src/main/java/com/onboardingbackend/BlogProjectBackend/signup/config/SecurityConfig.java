@@ -4,6 +4,7 @@ import com.onboardingbackend.BlogProjectBackend.signup.jwt.JWTFilter;
 import com.onboardingbackend.BlogProjectBackend.signup.jwt.JWTUtil;
 import com.onboardingbackend.BlogProjectBackend.signup.jwt.LoginFilter;
 import com.onboardingbackend.BlogProjectBackend.signup.service.RefreshTokenService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -53,6 +54,15 @@ public class SecurityConfig {
                         .requestMatchers("/login","/","/join","/auth/refreshtoken").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
+        http
+                .exceptionHandling((exceptions) -> exceptions
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+                        )
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden")
+                        )
+                ); // 이 설정이 없으면 403에러 반환하게됨...jwt없을때는 401로 반환해야함
 
         http
                 .addFilterBefore(new JWTFilter(jwtUtil),LoginFilter.class);
