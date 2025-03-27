@@ -1,4 +1,4 @@
-package com.onboardingbackend.BlogProjectBackend.jwt;
+package com.onboardingbackend.BlogProjectBackend.signup.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onboardingbackend.BlogProjectBackend.signup.dto.CustomerUserDetails;
@@ -32,7 +32,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
           this.jwtUtil=jwtUtil;
           this.refreshTokenService=refreshTokenService;
     }
-
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
