@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 @Controller
 @ResponseBody
-public class MainContoller {
+public class MainController {
 
     @GetMapping("/")
     public String mainP(){
