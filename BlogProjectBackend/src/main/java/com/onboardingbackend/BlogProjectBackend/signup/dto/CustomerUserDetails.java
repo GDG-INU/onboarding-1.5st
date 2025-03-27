@@ -56,4 +56,8 @@ public class CustomerUserDetails implements UserDetails {
     public String getUsername() {
         return userEntity.getUsername();
     }
+
+    public Integer getUserID() {
+        return userEntity.getId();
+    }
 }
