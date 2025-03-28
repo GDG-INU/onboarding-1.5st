@@ -7,10 +7,7 @@ import com.onboardingbackend.BlogProjectBackend.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/board")
@@ -27,5 +24,10 @@ public class BoardController {
         BoardResponseDto response = boardService.create(boardRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response); // 응답 반환
     }
-
+    // 글 삭제
+    @GetMapping("/delete/{boardId}")
+    public String delete(@PathVariable Integer id){
+        boardService.delete(id);
+        return "redirect:/board/";
+    }
 }

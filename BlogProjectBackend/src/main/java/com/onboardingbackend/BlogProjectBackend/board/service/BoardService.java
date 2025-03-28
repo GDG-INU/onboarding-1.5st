@@ -29,6 +29,10 @@ public class BoardService {
 
         return new BoardResponseDto(savedBoard);
     }
+
+    public void delete(Integer id){
+        boardRepository.deleteById(id);
+    }
 }
 
 
