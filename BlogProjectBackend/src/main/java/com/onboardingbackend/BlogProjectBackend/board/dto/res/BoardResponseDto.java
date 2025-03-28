@@ -6,11 +6,12 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class BoardResponseDto {
-    private final Integer id;
-    private final String title;
-    private final String content;
-    private final LocalDateTime createdAt;
-    private final Integer likeCount;
+    private Integer id;
+    private String title;
+    private String content;
+    private LocalDateTime createdAt;
+    private Integer likeCount;
+    private String author;
 
     public BoardResponseDto(Board board){
         this.id = board.getId();
@@ -18,8 +19,7 @@ public class BoardResponseDto {
         this.content = board.getContent();
         this.createdAt = board.getCreatedAt();
         this.likeCount = board.getLikeCount();
-
+        this.author = board.getAuthor();
     }
-
 
 }
