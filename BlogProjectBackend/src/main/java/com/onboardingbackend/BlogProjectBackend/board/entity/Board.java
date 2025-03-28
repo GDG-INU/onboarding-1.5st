@@ -14,8 +14,10 @@ public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String title;
     private String content;
+    private String author;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -23,20 +25,22 @@ public class Board {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @Column
-    private Integer likeCount;
+    @Column(nullable = false)
+    private Integer likeCount = 0;
 
-    @Column
-    private Integer viewCount;
+    @Column(nullable = false)
+    private Integer viewCount = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "user_id")
     private Member member;
 
-    public Board update(BoardRequestDto boardRequestDto){
+    public void update(BoardRequestDto boardRequestDto){
         this.title = boardRequestDto.getTitle();
         this.content = boardRequestDto.getContent();
-        return this;
     }
 
+    public boolean isAuthor(String username){
+        return this.author != null && this.author.equals(username);
+    }
 }
