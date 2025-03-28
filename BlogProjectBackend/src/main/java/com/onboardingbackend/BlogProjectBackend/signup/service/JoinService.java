@@ -6,6 +6,8 @@ import com.onboardingbackend.BlogProjectBackend.signup.repository.UserRepository
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class JoinService {
 
@@ -19,14 +21,16 @@ public class JoinService {
 
     public void joinProcess(JoinDTO joinDTO){
 
-        String username=joinDTO.getUsername();
+        String username = "user_" + UUID.randomUUID().toString().substring(0, 8);
+        String email=joinDTO.getEmail();
         String password=joinDTO.getPassword();
 
-        Boolean isExist=userRepository.existsByUsername(username);
 
-        if(isExist){
-            throw new IllegalArgumentException("이미 존재하는 사용자입니다."); //의미상 예외 지정
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
+
+
         UserEntity data=new UserEntity();
         data.setUsername(username);
         data.setPassword(bCryptPasswordEncoder.encode(password));
