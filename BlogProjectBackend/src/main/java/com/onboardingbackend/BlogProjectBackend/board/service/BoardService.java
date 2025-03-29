@@ -1,15 +1,24 @@
 package com.onboardingbackend.BlogProjectBackend.board.service;
 
 import com.onboardingbackend.BlogProjectBackend.board.dto.req.BoardRequestDto;
+import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardListResponseDto;
+import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardPageResponseDto;
+import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardPagedResponseDto;
 import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardResponseDto;
 import com.onboardingbackend.BlogProjectBackend.board.entity.Board;
 import com.onboardingbackend.BlogProjectBackend.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +64,35 @@ public class BoardService {
                 .orElseThrow(()->new IllegalArgumentException("게시물을 찾을 수 없습니다."));
         return board.getAuthor().equals(username);
     }
+
+    // 글 전체 목록 조회
+    @Transactional(readOnly = true)
+    public BoardPagedResponseDto findBoardPage(int page, int size){
+        // 생성일 기준 내림차순 정렬
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<Board> boardPage = boardRepository.findAll(pageable);
+
+        List<BoardListResponseDto> boards = boardPage.stream()
+                .map(BoardListResponseDto::new)
+                .toList();
+
+        int blockSize = 5;
+        int currentPage = boardPage.getNumber() + 1;
+        int totalPages = boardPage.getTotalPages();
+        int startPage = ((currentPage - 1) / blockSize) * blockSize + 1;
+        int endPage = Math.min(startPage + blockSize - 1, totalPages);
+
+        BoardPageResponseDto pageResponseDto = new BoardPageResponseDto();
+        pageResponseDto.setCurrentPage(currentPage);
+        pageResponseDto.setTotalPages(totalPages);
+        pageResponseDto.setEndPage(endPage);
+
+        BoardPagedResponseDto response = new BoardPagedResponseDto();
+        response.setBoards(boards);
+        response.setPage(pageResponseDto);
+        return response;
+    }
+
 }
 
 
