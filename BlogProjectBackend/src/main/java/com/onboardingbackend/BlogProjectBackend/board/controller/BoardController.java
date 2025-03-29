@@ -29,13 +29,16 @@ public class BoardController {
     @PostMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<BoardResponseDto> createBoard(@RequestBody BoardRequestDto boardRequestDto) {
-        BoardResponseDto response = boardService.create(boardRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        // 컨트롤러에서 인증 정보를 가져와 서비스로 전달
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        BoardResponseDto createdBoard = boardService.create(boardRequestDto, currentUsername);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdBoard);
     }
 
     // 게시글 삭제
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @boardService.isAuthor(#id, authentication.principal.username)")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> deleteBoard(@PathVariable Integer id){
         boardService.delete(id);
         return ResponseEntity.noContent().build();
@@ -43,7 +46,7 @@ public class BoardController {
 
     // 게시글 수정
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @boardService.isAuthor(#id, authentication.principal.username)")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<BoardResponseDto> updateBoard(@PathVariable Integer id, @RequestBody BoardRequestDto boardRequestDto){
         BoardResponseDto response = boardService.update(id, boardRequestDto);
         return ResponseEntity.ok(response);
@@ -84,6 +87,5 @@ public class BoardController {
         List<BoardListResponseDto> result = boardService.getBoardsByTag(name);
         return ResponseEntity.ok(result);
     }
-
 
 }

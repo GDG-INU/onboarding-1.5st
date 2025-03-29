@@ -8,6 +8,8 @@ import com.onboardingbackend.BlogProjectBackend.board.entity.Tag;
 import com.onboardingbackend.BlogProjectBackend.board.repository.BoardRepository;
 import com.onboardingbackend.BlogProjectBackend.board.repository.BoardTagRepository;
 import com.onboardingbackend.BlogProjectBackend.board.repository.TagRepository;
+import com.onboardingbackend.BlogProjectBackend.signup.entity.UserEntity;
+import com.onboardingbackend.BlogProjectBackend.signup.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,17 +31,22 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final TagRepository tagRepository;
     private final BoardTagRepository boardTagRepository;
+    private final UserRepository userRepository;
 
     // 게시글 작성
-    public BoardResponseDto create(BoardRequestDto boardRequestDto) {
+    public BoardResponseDto create(BoardRequestDto boardRequestDto, String username) {
+
+        UserEntity user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new IllegalArgumentException("찾을 수 없는 사용자");
+        }
         Board board = new Board();
         board.setTitle(boardRequestDto.getTitle());
         board.setContent(boardRequestDto.getContent());
         board.setCreatedAt(LocalDateTime.now());
         board.setLikeCount(0);
 
-        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        board.setAuthor(currentUsername);
+        board.setUser(user);
 
         Board savedBoard = boardRepository.save(board);
         return new BoardResponseDto(savedBoard);
@@ -47,9 +54,7 @@ public class BoardService {
 
     // 게시글 삭제
     public void delete(Integer id){
-        Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("게시물이 없습니다."));
-        boardRepository.delete(board);
+        boardRepository.deleteById(id);
     }
 
     // 게시글 수정
