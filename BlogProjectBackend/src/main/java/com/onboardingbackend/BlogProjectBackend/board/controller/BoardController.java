@@ -1,13 +1,18 @@
 package com.onboardingbackend.BlogProjectBackend.board.controller;
 
 import com.onboardingbackend.BlogProjectBackend.board.dto.req.BoardRequestDto;
+import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardListResponseDto;
+import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardPagedResponseDto;
 import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardResponseDto;
+import com.onboardingbackend.BlogProjectBackend.board.entity.Board;
 import com.onboardingbackend.BlogProjectBackend.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,5 +46,11 @@ public class BoardController {
         return ResponseEntity.ok(response);
     }
 
+    // 글 전체 목록 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<BoardPagedResponseDto> getBoardPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        BoardPagedResponseDto response= boardService.findBoardPage(page, size);
+        return ResponseEntity.ok(response);
+    }
 
 }

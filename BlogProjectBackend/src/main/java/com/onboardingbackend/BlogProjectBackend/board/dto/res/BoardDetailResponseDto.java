@@ -18,7 +18,7 @@ public class BoardDetailResponseDto {
     private Integer viewCount;
 
     public BoardDetailResponseDto(Board board){
-        this.nickname = board.getMember().getNickname();
+//        this.nickname = board.getMember().getNickname();
         this.title = board.getTitle();
         this.content = board.getContent();
         this.createdAt = board.getCreatedAt();
