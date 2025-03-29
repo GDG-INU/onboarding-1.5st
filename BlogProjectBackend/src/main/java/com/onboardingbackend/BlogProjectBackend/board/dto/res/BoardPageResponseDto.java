@@ -8,7 +8,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class BoardPageResponseDto {
-
     private int currentPage; // 현재 페이지
 
     private int totalPages; // 전체 필요한 페이지 갯수

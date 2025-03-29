@@ -33,7 +33,7 @@ public class Board {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "user_id")
-    private Member member;
+    private UserEntity user;
 
     public void update(BoardRequestDto boardRequestDto){
         this.title = boardRequestDto.getTitle();
@@ -41,6 +41,6 @@ public class Board {
     }
 
     public boolean isAuthor(String username){
-        return this.author != null && this.author.equals(username);
+        return this.user != null && this.user.getUsername().equals(username);
     }
 }

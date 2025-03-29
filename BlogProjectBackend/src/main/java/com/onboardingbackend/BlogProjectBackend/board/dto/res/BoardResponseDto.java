@@ -19,7 +19,13 @@ public class BoardResponseDto {
         this.content = board.getContent();
         this.createdAt = board.getCreatedAt();
         this.likeCount = board.getLikeCount();
-        this.author = board.getAuthor();
+        if (board.getUser() != null){
+            this.author = board.getUser().getUsername();
+            this.role = board.getUser().getRole();
+        } else {
+            this.author = null;
+            this.role = null;
+        }
     }
 
 }
