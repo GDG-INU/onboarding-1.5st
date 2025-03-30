@@ -25,6 +25,5 @@ public class BoardDetailResponseDto {
         this.updatedAt = board.getUpdatedAt();
         this.likeCount = board.getLikeCount();
         this.viewCount = board.getViewCount();
-        this.role = board.getUser() != null ? board.getUser().getRole() : null;
     }
 }

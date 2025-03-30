@@ -11,7 +11,6 @@ public class BoardResponseDto {
     private String content;
     private LocalDateTime createdAt;
     private Integer likeCount;
-    private String author;
 
     public BoardResponseDto(Board board){
         this.id = board.getId();
@@ -19,13 +18,7 @@ public class BoardResponseDto {
         this.content = board.getContent();
         this.createdAt = board.getCreatedAt();
         this.likeCount = board.getLikeCount();
-        if (board.getUser() != null){
-            this.author = board.getUser().getUsername();
-            this.role = board.getUser().getRole();
-        } else {
-            this.author = null;
-            this.role = null;
-        }
+
     }
 
 }

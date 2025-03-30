@@ -1,5 +1,6 @@
 package com.onboardingbackend.BlogProjectBackend.board.entity;
 import com.onboardingbackend.BlogProjectBackend.board.dto.req.BoardRequestDto;
+import com.onboardingbackend.BlogProjectBackend.signup.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,7 +18,6 @@ public class Board {
 
     private String title;
     private String content;
-    private String author;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
