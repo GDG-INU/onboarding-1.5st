@@ -5,18 +5,16 @@ import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardDetailRespons
 import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardListResponseDto;
 import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardPagedResponseDto;
 import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardResponseDto;
-import com.onboardingbackend.BlogProjectBackend.board.entity.Board;
 import com.onboardingbackend.BlogProjectBackend.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Repository;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/board")
@@ -28,9 +26,9 @@ public class BoardController {
     // 게시글 작성
     @PostMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<BoardResponseDto> createBoard(@RequestBody BoardRequestDto boardRequestDto) {
+    public ResponseEntity<BoardResponseDto> createBoard(@RequestBody BoardRequestDto boardRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
         // 컨트롤러에서 인증 정보를 가져와 서비스로 전달
-        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        String currentUsername = userDetails.getUsername();
 
         BoardResponseDto createdBoard = boardService.create(boardRequestDto, currentUsername);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBoard);
@@ -53,7 +51,7 @@ public class BoardController {
     }
 
     // 게시글 전체 목록 조회
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/list")
     public ResponseEntity<BoardPagedResponseDto> getBoardPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
         BoardPagedResponseDto response= boardService.findBoardPage(page, size);
         return ResponseEntity.ok(response);
@@ -69,8 +67,8 @@ public class BoardController {
 
     // 좋아요 토글
     @PostMapping("/{id}/like")
-    public ResponseEntity<BoardResponseDto> toggleLike(@PathVariable Integer id){
-        BoardResponseDto reponse = boardService.toggleLike(id);
+    public ResponseEntity<BoardResponseDto> toggleLike(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails){
+        BoardResponseDto reponse = boardService.toggleLike(id, userDetails);
         return ResponseEntity.ok(reponse);
     }
 
