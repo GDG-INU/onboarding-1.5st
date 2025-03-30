@@ -54,10 +54,18 @@ public class CustomerUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userEntity.getUsername();
+        return userEntity.getEmail();
     }
 
     public Integer getUserID() {
         return userEntity.getId();
+    }
+
+    public String getEmail() {
+        return userEntity.getEmail();
+    }
+
+    public String getNickname() {
+        return userEntity.getNickname();
     }
 }

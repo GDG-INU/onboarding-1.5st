@@ -17,8 +17,8 @@ public class JWTUtil {
     public JWTUtil(@Value("${spring.jwt.secret}")String secret){
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
-    public String getUsername(String token){
-        return extractClaims(token).get("username", String.class);
+    public String getEmail(String token){
+        return extractClaims(token).get("email", String.class);
     }
     public String getRole(String token) {
         return extractClaims(token).get("role", String.class);
@@ -27,10 +27,10 @@ public class JWTUtil {
         return extractClaims(token).getExpiration().before(new Date());
     }
 
-    public String createJwt(String username, String role, Long expiredMs) {
+    public String createJwt(String email, String role, Long expiredMs) {
 
         return Jwts.builder()
-                .claim("username", username)
+                .claim("email", email)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
