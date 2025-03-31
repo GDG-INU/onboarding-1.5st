@@ -36,6 +36,39 @@ export const login = createAsyncThunk(
   }
 );
 
+// 사용자 정보 조회 액션
+export const getUserInfo = createAsyncThunk(
+  'auth/getUserInfo',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/');
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        return rejectWithValue('인증이 필요합니다.');
+      }
+      return rejectWithValue('사용자 정보를 가져오는 중 오류가 발생했습니다.');
+    }
+  }
+);
+
+// 관리자 상태 확인 액션
+export const checkAdminStatus = createAsyncThunk(
+  'auth/checkAdminStatus',
+  async (_, { rejectWithValue }) => {
+    try {
+      // 관리자 페이지 접근 권한 확인
+      const response = await api.get('/admin');
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        return rejectWithValue('관리자 권한이 없습니다.');
+      }
+      return rejectWithValue('관리자 상태 확인 중 오류가 발생했습니다.');
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
@@ -44,6 +77,8 @@ const authSlice = createSlice({
     error: null,
     success: false,
     isAuthenticated: !!localStorage.getItem('accessToken'),
+    isAdmin: false,
+    role: null,
   },
   reducers: {
     clearError: (state) => {
@@ -57,6 +92,12 @@ const authSlice = createSlice({
       localStorage.removeItem('refreshToken');
       state.user = null;
       state.isAuthenticated = false;
+      state.isAdmin = false;
+      state.role = null;
+    },
+    refreshTokenSuccess: (state, action) => {
+      state.isAuthenticated = true;
+      // 토큰이 갱신되었으므로 인증 상태 유지
     },
   },
   extraReducers: (builder) => {
@@ -90,9 +131,49 @@ const authSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      // 사용자 정보 조회 리듀서
+      .addCase(getUserInfo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUserInfo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = {
+          ...state.user,
+          email: action.payload.email,
+          role: action.payload.role,
+        };
+        state.role = action.payload.role;
+        state.isAdmin = action.payload.role === 'ROLE_ADMIN';
+      })
+      .addCase(getUserInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        // 401 에러의 경우 로그아웃 처리
+        if (action.payload === '인증이 필요합니다.') {
+          state.isAuthenticated = false;
+          state.user = null;
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+        }
+      })
+      // 관리자 상태 확인 리듀서
+      .addCase(checkAdminStatus.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(checkAdminStatus.fulfilled, (state) => {
+        state.loading = false;
+        state.isAdmin = true;
+      })
+      .addCase(checkAdminStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.isAdmin = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearError, clearSuccess, logout } = authSlice.actions;
+export const { clearError, clearSuccess, logout, refreshTokenSuccess } = authSlice.actions;
 export default authSlice.reducer;

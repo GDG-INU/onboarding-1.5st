@@ -11,6 +11,7 @@ import UserHome from './pages/UserHome';
 import Write from './pages/Write';
 import ArticlePage from './pages/Article';
 import Settings from './pages/Setting';
+import Admin from './pages/Admin';
 
 function App() {
   return (
@@ -26,7 +27,8 @@ function App() {
             <Route path="/userhome" element={<UserHome />} />
             <Route path="/Write" element={<Write />} />
             <Route path="/Article" element={<ArticlePage />} />
-            <Route path="Settings" element={<Settings />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </div>
       </div>
