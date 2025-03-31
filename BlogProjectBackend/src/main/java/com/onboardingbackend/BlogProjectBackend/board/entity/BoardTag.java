@@ -12,7 +12,6 @@ import org.hibernate.annotations.BatchSize;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@BatchSize(size = 100)
 public class BoardTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
