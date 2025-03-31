@@ -104,14 +104,13 @@ public class BoardService {
     }
 
     // 좋아요 토글
-    public BoardResponseDto toggleLike(Integer id, UserDetails userDetails){
+    @Transactional
+    public BoardResponseDto toggleLike(Integer id, String username){
         Board board = boardRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("게시물을 찾을 수 없습니다."));
 
-        UserEntity user = userRepository.findByUsername(userDetails.getUsername());
-        if(user==null){
-            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
-        }
+        UserEntity user = Optional.ofNullable(userRepository.findByUsername(username))
+                .orElseThrow(()->new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         Optional<BoardLike> exsitLike = boardLikeRepository.findByBoardAndUser(board, user);
         if (exsitLike.isPresent()){

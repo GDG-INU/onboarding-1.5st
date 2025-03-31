@@ -3,14 +3,15 @@ import com.onboardingbackend.BlogProjectBackend.board.dto.req.BoardRequestDto;
 import com.onboardingbackend.BlogProjectBackend.signup.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.lang.reflect.Member;
 import java.time.LocalDateTime;
 
 @Entity
 @Data
+@BatchSize(size = 100)
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,12 +36,12 @@ public class Board {
     @JoinColumn(name= "user_id")
     private UserEntity user;
 
+    @Version
+    private Integer version;
+
     public void update(BoardRequestDto boardRequestDto){
         this.title = boardRequestDto.getTitle();
         this.content = boardRequestDto.getContent();
     }
 
-    public boolean isAuthor(String username){
-        return this.user != null && this.user.getUsername().equals(username);
-    }
 }
