@@ -7,11 +7,11 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.lang.reflect.Member;
 import java.time.LocalDateTime;
 
 @Entity
 @Data
+@BatchSize(size = 100)
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
