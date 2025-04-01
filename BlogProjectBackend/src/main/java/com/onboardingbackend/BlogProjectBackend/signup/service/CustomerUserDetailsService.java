@@ -17,13 +17,14 @@ public class CustomerUserDetailsService implements UserDetailsService {
         this.userRepository=userRepository;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userData=userRepository.findByUsername(username);
 
-        if(userData!=null){
-            return new CustomerUserDetails(userData);
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserEntity userData=userRepository.findByEmail(email);
+
+        if (userData == null) {
+            throw new UsernameNotFoundException("유저를 찾을 수 없습니다.");
         }
-        return null;
+        return new CustomerUserDetails(userData);
     }
 }

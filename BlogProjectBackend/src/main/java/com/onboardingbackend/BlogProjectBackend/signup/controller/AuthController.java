@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -29,7 +30,9 @@ public class AuthController {
 
         // Refresh Token 값이 없으면 400 Bad Request
         if (requestRefreshToken == null || requestRefreshToken.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Refresh token is required");
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Refresh token is required");
+            return ResponseEntity.badRequest().body(error);
         }
 
         // 1) DB에서 Refresh Token 조회
