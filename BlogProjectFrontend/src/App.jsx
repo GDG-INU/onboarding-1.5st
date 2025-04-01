@@ -10,8 +10,10 @@ import About from './pages/About';
 import UserHome from './pages/UserHome';
 import Write from './pages/Write';
 import ArticlePage from './pages/Article';
+import EditArticle from './pages/EditArticle';
 import Settings from './pages/Setting';
 import Admin from './pages/Admin';
+import TagSearchResults from './pages/TagSearchResults';
 
 function App() {
   return (
@@ -25,10 +27,12 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/about" element={<About />} />
             <Route path="/userhome" element={<UserHome />} />
-            <Route path="/Write" element={<Write />} />
-            <Route path="/Article" element={<ArticlePage />} />
+            <Route path="/write" element={<Write />} />
+            <Route path="/article" element={<ArticlePage />} />
+            <Route path="/edit-article" element={<EditArticle />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/tag-search" element={<TagSearchResults />} />
           </Routes>
         </div>
       </div>
