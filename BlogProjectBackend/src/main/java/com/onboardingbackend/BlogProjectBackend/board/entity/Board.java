@@ -43,4 +43,8 @@ public class Board {
         this.title = boardRequestDto.getTitle();
         this.content = boardRequestDto.getContent();
     }
+
+    public boolean isAuthor(String email){
+        return this.user != null && this.user.getEmail().equals(email); // email로 user인지 판단(기존:username)
+    }
 }
