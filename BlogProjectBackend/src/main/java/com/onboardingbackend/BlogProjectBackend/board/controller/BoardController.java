@@ -69,7 +69,7 @@ public class BoardController {
     // 좋아요 토글
     @PostMapping("/{id}/like")
     public ResponseEntity<BoardResponseDto> toggleLike(@PathVariable Integer id, @AuthenticationPrincipal CustomerUserDetails userDetails){
-        BoardResponseDto reponse = boardService.toggleLike(id, userDetails);
+        BoardResponseDto reponse = boardService.toggleLike(id, userDetails.getEmail());
         return ResponseEntity.ok(reponse);
     }
 

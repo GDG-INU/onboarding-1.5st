@@ -3,6 +3,7 @@ import com.onboardingbackend.BlogProjectBackend.board.dto.req.BoardRequestDto;
 import com.onboardingbackend.BlogProjectBackend.signup.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -35,12 +36,11 @@ public class Board {
     @JoinColumn(name= "user_id")
     private UserEntity user;
 
+    @Version
+    private Integer version;
+
     public void update(BoardRequestDto boardRequestDto){
         this.title = boardRequestDto.getTitle();
         this.content = boardRequestDto.getContent();
-    }
-
-    public boolean isAuthor(String email){
-        return this.user != null && this.user.getEmail().equals(email); // email로 user인지 판단(기존:username)
     }
 }
