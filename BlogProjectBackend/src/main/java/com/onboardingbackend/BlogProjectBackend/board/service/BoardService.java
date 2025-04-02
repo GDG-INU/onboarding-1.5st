@@ -10,6 +10,7 @@ import com.onboardingbackend.BlogProjectBackend.board.repository.BoardLikeReposi
 import com.onboardingbackend.BlogProjectBackend.board.repository.BoardRepository;
 import com.onboardingbackend.BlogProjectBackend.board.repository.BoardTagRepository;
 import com.onboardingbackend.BlogProjectBackend.board.repository.TagRepository;
+import com.onboardingbackend.BlogProjectBackend.signup.dto.CustomerUserDetails;
 import com.onboardingbackend.BlogProjectBackend.signup.entity.UserEntity;
 import com.onboardingbackend.BlogProjectBackend.signup.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,9 +38,9 @@ public class BoardService {
     private final BoardLikeRepository boardLikeRepository;
 
     // 게시글 작성
-    public BoardResponseDto create(BoardRequestDto boardRequestDto, String username) {
+    public BoardResponseDto create(BoardRequestDto boardRequestDto, String email) {
 
-        UserEntity user = Optional.ofNullable(userRepository.findByUsername(username))
+        UserEntity user = Optional.ofNullable(userRepository.findByEmail(email))
                 .orElseThrow(()->new IllegalArgumentException("찾을 수 없는 사용자"));
 
         Board board = new Board();
@@ -104,11 +105,11 @@ public class BoardService {
     }
 
     // 좋아요 토글
-    public BoardResponseDto toggleLike(Integer id, UserDetails userDetails){
+    public BoardResponseDto toggleLike(Integer id, CustomerUserDetails userDetails){
         Board board = boardRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("게시물을 찾을 수 없습니다."));
 
-        UserEntity user = userRepository.findByUsername(userDetails.getUsername());
+        UserEntity user = userRepository.findByEmail(userDetails.getEmail());
         if(user==null){
             throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
         }

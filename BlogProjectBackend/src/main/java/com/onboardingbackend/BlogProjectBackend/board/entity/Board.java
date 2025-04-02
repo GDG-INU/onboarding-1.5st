@@ -40,7 +40,7 @@ public class Board {
         this.content = boardRequestDto.getContent();
     }
 
-    public boolean isAuthor(String username){
-        return this.user != null && this.user.getUsername().equals(username);
+    public boolean isAuthor(String email){
+        return this.user != null && this.user.getEmail().equals(email); // email로 user인지 판단(기존:username)
     }
 }
