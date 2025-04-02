@@ -6,6 +6,7 @@ import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardListResponseD
 import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardPagedResponseDto;
 import com.onboardingbackend.BlogProjectBackend.board.dto.res.BoardResponseDto;
 import com.onboardingbackend.BlogProjectBackend.board.service.BoardService;
+import com.onboardingbackend.BlogProjectBackend.signup.dto.CustomerUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +27,11 @@ public class BoardController {
     // 게시글 작성
     @PostMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<BoardResponseDto> createBoard(@RequestBody BoardRequestDto boardRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<BoardResponseDto> createBoard(@RequestBody BoardRequestDto boardRequestDto, @AuthenticationPrincipal CustomerUserDetails userDetails) {
         // 컨트롤러에서 인증 정보를 가져와 서비스로 전달
-        String currentUsername = userDetails.getUsername();
+        String currentEmail = userDetails.getEmail();  //Username이 아닌 Email로 User찾기로 수정
 
-        BoardResponseDto createdBoard = boardService.create(boardRequestDto, currentUsername);
+        BoardResponseDto createdBoard = boardService.create(boardRequestDto, currentEmail);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBoard);
     }
 
@@ -67,7 +68,7 @@ public class BoardController {
 
     // 좋아요 토글
     @PostMapping("/{id}/like")
-    public ResponseEntity<BoardResponseDto> toggleLike(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<BoardResponseDto> toggleLike(@PathVariable Integer id, @AuthenticationPrincipal CustomerUserDetails userDetails){
         BoardResponseDto reponse = boardService.toggleLike(id, userDetails);
         return ResponseEntity.ok(reponse);
     }
