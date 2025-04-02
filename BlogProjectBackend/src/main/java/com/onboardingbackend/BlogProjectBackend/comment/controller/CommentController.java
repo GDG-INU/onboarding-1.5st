@@ -28,6 +28,9 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createComment);
     }
 
+    // 댓글 삭제
+
+
 
 
 }
