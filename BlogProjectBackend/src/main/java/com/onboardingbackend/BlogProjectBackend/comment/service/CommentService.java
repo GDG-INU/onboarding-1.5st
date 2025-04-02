@@ -29,7 +29,7 @@ public class CommentService {
     public CommentResponseDto create(Integer boardId, UserDetails userDetails, CommentRequestDto commentRequestDto){
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(()-> new IllegalArgumentException("해당 게시판이 존재하지 않습니다."));
-        UserEntity user = userRepository.findByUsername(userDetails.getUsername())
+        UserEntity user = userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(()-> new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다."));
 
         Comment comment = new Comment();
@@ -41,6 +41,14 @@ public class CommentService {
 
         Comment savedComment = commentRepository.save(comment);
         return new CommentResponseDto(savedComment);
+    }
+
+    // 댓글 삭제
+    public Boolean delete(Integer id, UserDetails userDetails){
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+        commentRepository.delete(comment);
+        return true;
     }
 
 }
