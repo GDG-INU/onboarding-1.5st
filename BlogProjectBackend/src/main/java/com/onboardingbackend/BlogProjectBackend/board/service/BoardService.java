@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +41,7 @@ public class BoardService {
     // 게시글 작성
     public BoardResponseDto create(BoardRequestDto boardRequestDto, String email) {
 
-        UserEntity user = Optional.ofNullable(userRepository.findByEmail(email))
+        UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(()->new IllegalArgumentException("찾을 수 없는 사용자"));
 
         Board board = new Board();
@@ -61,10 +62,17 @@ public class BoardService {
 
     // 게시글 수정
     public BoardResponseDto update(Integer id, BoardRequestDto boardRequestDto){
-        Board board = boardRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("게시물이 없습니다."));
-        board.update(boardRequestDto);
-        return new BoardResponseDto(board);
+        try {
+            Board board = boardRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("게시물이 없습니다."));
+
+            board.update(boardRequestDto);
+            boardRepository.save(board); // <- 명시적으로 save 호출
+
+            return new BoardResponseDto(board);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            throw new IllegalStateException("다른 사용자가 이미 수정한 게시글입니다. 다시 시도해주세요.");
+        }
     }
 
     // 게시글 목록 조회
@@ -106,11 +114,11 @@ public class BoardService {
 
     // 좋아요 토글
     @Transactional
-    public BoardResponseDto toggleLike(Integer id, CustomerUserDetails userDetails){
+    public BoardResponseDto toggleLike(Integer id, String email){
         Board board = boardRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("게시물을 찾을 수 없습니다."));
 
-        UserEntity user = userRepository.findByEmail(userDetails.getEmail())
+        UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(()->new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         Optional<BoardLike> exsitLike = boardLikeRepository.findByBoardAndUser(board, user);
@@ -155,5 +163,4 @@ public class BoardService {
     }
 
 }
-
 
