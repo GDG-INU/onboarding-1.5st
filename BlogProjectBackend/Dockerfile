@@ -1,5 +1,5 @@
 # 1️⃣ //JRE 기반 이미지”**만 있어도 실행은 충분
-FROM eclipse-temurin:21-jre
+FROM --platform=linux/amd64 eclipse-temurin:21-jre
 
 # 2️⃣ 작업 디렉토리 설정
 WORKDIR /app

@@ -1,35 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { getPost, deletePost, fetchRelatedArticles } from '../store/blogSlice';
+import { getPost, deletePost, fetchRelatedArticles, likePost } from '../store/blogSlice';
+import { AppDispatch, RootState, Article } from '../store/blogSlice';
+
 import ArticleContent from '../components/ArticleContent';
 import ArticleHeader from '../components/ArticleHeader';
 import LikeButton from '../components/LikeButton';
 import CommentSection from '../components/CommentSection';
 import RelatedArticles from '../components/RelatedArticles';
 
-// Define the Article interface
-interface Article {
-  id: number;
-  title: string;
-  content: string;
-  author: string;
-  createdAt: string;
-  modifiedAt?: string;
-  likeCount: number;
-  role?: string;
-  tags?: string[];
-}
-
-// Simple State interface
-interface RootState {
-  blog: any;
-  auth: any;
-}
-
 const ArticlePage: React.FC = () => {
-  // Use any type for dispatch to avoid TypeScript errors with thunks
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
   const { currentPost, loading, error, success, relatedArticles } = useSelector((state: RootState) => state.blog);
@@ -43,30 +25,30 @@ const ArticlePage: React.FC = () => {
   
   useEffect(() => {
     if (articleId) {
-      // Use any to bypass TypeScript type checking
       dispatch(getPost(articleId));
       dispatch(fetchRelatedArticles(articleId));
     }
   }, [articleId, dispatch]);
 
   useEffect(() => {
-    if (success && !currentPost) {
+    if (success && location.state?.from === 'delete') {
       navigate('/');
+    } else if (success && !currentPost && !loading) {
     }
-  }, [success, currentPost, navigate]);
+  }, [success, currentPost, loading, navigate, location.state]);
   
   useEffect(() => {
     if (currentPost) {
       setArticle({
-        id: currentPost.id || 0,
-        title: currentPost.title || '',
-        content: currentPost.content || '',
+        id: currentPost.id,
+        title: currentPost.title,
+        content: currentPost.content,
         author: currentPost.author || currentPost.nickname || '익명',
-        createdAt: currentPost.createdAt || new Date().toISOString(),
-        modifiedAt: currentPost.modifiedAt,
-        likeCount: currentPost.likeCount || 0,
+        createdAt: currentPost.createdAt,
+        modifiedAt: currentPost.modifiedAt || currentPost.updatedAt,
+        likeCount: currentPost.likeCount,
         role: currentPost.role,
-        tags: currentPost.tags
+        tags: Array.isArray(currentPost.tags) ? currentPost.tags : [] 
       });
     }
   }, [currentPost]);
@@ -81,15 +63,22 @@ const ArticlePage: React.FC = () => {
     setShowDeleteConfirm(true);
   };
   
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (articleId) {
-      dispatch(deletePost(articleId));
+      await dispatch(deletePost(articleId));
+      navigate(location.pathname + location.search, { state: { from: 'delete' } });
       setShowDeleteConfirm(false);
     }
   };
   
   const cancelDelete = () => {
     setShowDeleteConfirm(false);
+  };
+
+  const handleLike = () => {
+    if (article && article.id) {
+      dispatch(likePost(article.id));
+    }
   };
   
   if (loading && !article) return <div className="text-center mt-20">로딩 중...</div>;
@@ -106,52 +95,40 @@ const ArticlePage: React.FC = () => {
     </div>
   );
 
-  if (!article) return null;
+  if (!article) return (
+      <div className="text-center mt-20">
+        <p>게시글을 찾을 수 없습니다.</p>
+        <button
+          onClick={() => navigate('/')}
+          className="mt-4 px-4 py-2 bg-black text-white rounded"
+        >
+          메인으로 돌아가기
+        </button>
+      </div>
+    );
 
-  // Make sure all values exist before comparison
-  const isAuthor = isAuthenticated && user && article.author && (
-    (user.email && user.email === article.author) || 
-    (user.nickname && user.nickname === article.author)
-  );
+  const isAuthor = isAuthenticated && user && article.author && 
+                   ((user.email && user.email === article.author) || 
+                    (user.nickname && user.nickname === article.author));
   
   const isAdmin = isAuthenticated && user && user.role === 'ROLE_ADMIN';
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10 space-y-10">
-      <div className="flex justify-between items-start">
-        <ArticleHeader
-          title={article.title}
-          author={article.author}
-          createdAt={article.createdAt}
-          updatedAt={article.modifiedAt}
-        />
-        
-        {(isAuthor || isAdmin) && (
-          <div className="flex space-x-2">
-            <button
-              onClick={handleEdit}
-              className="px-4 py-2 bg-gray-100 text-gray-800 rounded hover:bg-gray-200 transition"
-            >
-              수정하기
-            </button>
-            <button
-              onClick={handleDelete}
-              className="px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition"
-            >
-              삭제하기
-            </button>
-          </div>
-        )}
-      </div>
+    <div className="container mx-auto p-4 max-w-4xl">
+      <ArticleHeader 
+        title={article.title} 
+        author={article.author || '익명'} 
+        createdAt={article.createdAt} 
+        updatedAt={article.modifiedAt || article.createdAt} 
+      />
       
-      {/* 태그 표시 */}
       {article.tags && article.tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mt-2">
-          {article.tags.map((tag, index) => (
+        <div className="mt-4 mb-4 flex flex-wrap gap-2">
+          {article.tags.map(tag => (
             <Link 
-              key={index} 
-              to={`/tag-search?tag=${encodeURIComponent(tag)}`}
-              className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-800 hover:bg-gray-200"
+              key={tag} 
+              to={`/tag-search?name=${encodeURIComponent(tag)}`} 
+              className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm hover:bg-gray-300"
             >
               #{tag}
             </Link>
@@ -161,40 +138,40 @@ const ArticlePage: React.FC = () => {
       
       <ArticleContent markdown={article.content} />
       
-      <LikeButton articleId={article.id} likeCount={article.likeCount} />
-      
-      <CommentSection />
-      
-      {/* 관련 게시글 */}
-      <RelatedArticles 
-        articles={relatedArticles} 
-        loading={loading && article} 
-        error={error && article}
-      />
-      
+      <div className="mt-8 flex justify-between items-center">
+        <LikeButton 
+          articleId={article.id} 
+          likeCount={article.likeCount}
+        />
+        
+        {(isAuthor || isAdmin) && (
+          <div className="flex space-x-2">
+            <button onClick={handleEdit} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">수정</button>
+            <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">삭제</button>
+          </div>
+        )}
+      </div>
+
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-            <h3 className="text-lg font-semibold mb-4">게시글 삭제</h3>
-            <p className="text-gray-700 mb-6">
-              정말로 이 게시글을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
-            </p>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <p className="mb-4">정말로 이 게시글을 삭제하시겠습니까?</p>
             <div className="flex justify-end space-x-2">
-              <button
-                onClick={cancelDelete}
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-100"
-              >
-                취소
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-              >
-                삭제하기
-              </button>
+              <button onClick={cancelDelete} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">취소</button>
+              <button onClick={confirmDelete} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">삭제 확인</button>
             </div>
           </div>
         </div>
+      )}
+
+      <CommentSection />
+      
+      {relatedArticles && (
+        <RelatedArticles 
+          articles={relatedArticles} 
+          loading={loading}
+          error={error || null}
+        />
       )}
     </div>
   );
