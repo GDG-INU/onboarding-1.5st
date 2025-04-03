@@ -32,13 +32,16 @@ public class CommentController {
 
     // 댓글 삭제
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Boolean> deletecomment(
-            @PathVariable Integer id,
-            @AuthenticationPrincipal UserDetails userDetails){
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.delete(id, userDetails));
+    public ResponseEntity<Boolean> deleteComment(
+            @PathVariable Integer commentId){
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.delete(commentId));
     }
 
-
-
-
+    //댓글 수정
+    @PutMapping("/{commentId}")
+    public ResponseEntity<CommentResponseDto> updateComment(
+            @PathVariable Integer commentId,
+            @RequestBody CommentRequestDto commentRequestDto){
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.update(commentId, commentRequestDto));
+    }
 }
