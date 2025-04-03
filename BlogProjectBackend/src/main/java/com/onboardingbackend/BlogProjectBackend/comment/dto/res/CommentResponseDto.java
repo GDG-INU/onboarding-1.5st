@@ -19,6 +19,23 @@ public class CommentResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    private List<CommentResponseDto> childComments; // 대댓글 트리
+
+    public static CommentResponseDto ofWithChildren(Comment comment) {
+        return CommentResponseDto.builder()
+                .id(comment.getId())
+                .content(comment.getContent())
+                .parentCommentId(comment.getParentComment() != null ? comment.getParentComment().getId() : null)
+                .likeCount(comment.getLikeCount())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+                .childComments(
+                        comment.getChildComments().stream()
+                                .map(CommentResponseDto::ofWithChildren) // 자식 댓글도 재귀 변환
+                                .toList()
+                )
+                .build();
+    }
 
 
     public static CommentResponseDto of(Comment comment) {

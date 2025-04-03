@@ -72,10 +72,7 @@ public class CommentService {
         return CommentResponseDto.of(comment);
     }
 
-    /**
-     * 댓글 좋아요
-     */
-    @Transactional
+    //댓글 좋아요
     public CommentResponseDto likeComment(Integer commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));

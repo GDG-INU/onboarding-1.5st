@@ -44,4 +44,9 @@ public class CommentController {
             @RequestBody CommentRequestDto commentRequestDto){
         return ResponseEntity.status(HttpStatus.OK).body(commentService.update(commentId, commentRequestDto));
     }
+
+    @PostMapping("/comments/{commentId}/like")
+    public ResponseEntity<CommentResponseDto> likeComment(@PathVariable Integer commentId) {
+        return ResponseEntity.ok(commentService.likeComment(commentId));
+    }
 }

@@ -58,11 +58,11 @@ public class BoardController {
         return ResponseEntity.ok(response);
     }
 
-    // 게시글 상세 조회
+    // 게시글 상세 조회+ 댓글트리 가져오기
     @GetMapping("/{id}")
     public ResponseEntity<BoardDetailResponseDto> getBoard(@PathVariable Integer id){
         boardService.updateViewCount(id);
-        BoardDetailResponseDto response = boardService.findById(id);
+        BoardDetailResponseDto response = boardService.findByIdWithComments(id);
         return ResponseEntity.ok(response);
     }
 
