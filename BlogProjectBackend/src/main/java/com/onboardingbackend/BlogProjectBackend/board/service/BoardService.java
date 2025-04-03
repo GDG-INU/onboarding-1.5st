@@ -10,6 +10,8 @@ import com.onboardingbackend.BlogProjectBackend.board.repository.BoardLikeReposi
 import com.onboardingbackend.BlogProjectBackend.board.repository.BoardRepository;
 import com.onboardingbackend.BlogProjectBackend.board.repository.BoardTagRepository;
 import com.onboardingbackend.BlogProjectBackend.board.repository.TagRepository;
+import com.onboardingbackend.BlogProjectBackend.comment.dto.res.CommentResponseDto;
+import com.onboardingbackend.BlogProjectBackend.comment.entity.Comment;
 import com.onboardingbackend.BlogProjectBackend.signup.dto.CustomerUserDetails;
 import com.onboardingbackend.BlogProjectBackend.signup.entity.UserEntity;
 import com.onboardingbackend.BlogProjectBackend.signup.repository.UserRepository;
@@ -102,6 +104,35 @@ public class BoardService {
     // 조회 수 증가 로직
     public void updateViewCount(Integer id){
         boardRepository.incrementViewCount(id);
+    }
+
+    @Transactional
+    public BoardDetailResponseDto findByIdWithComments(Integer boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+
+        // 1) 최상위 댓글만 추려서
+        List<Comment> topLevelComments = board.getComments().stream()
+                .filter(c -> c.getParentComment() == null)
+                .toList();
+
+        // 2) 대댓글까지 트리 구조로 DTO 변환
+        List<CommentResponseDto> commentDtos = topLevelComments.stream()
+                .map(CommentResponseDto::ofWithChildren)
+                .toList();
+
+        // 3) BoardDetailResponseDto 구성
+        return BoardDetailResponseDto.builder()
+                .id(board.getId())
+                .nickname(board.getUser() != null ? board.getUser().getNickname() : null)
+                .title(board.getTitle())
+                .content(board.getContent())
+                .likeCount(board.getLikeCount())
+                .viewCount(board.getViewCount())
+                .createdAt(board.getCreatedAt())
+                .updatedAt(board.getUpdatedAt())
+                .comments(commentDtos)
+                .build();
     }
 
     // 게시글 상세 조회
