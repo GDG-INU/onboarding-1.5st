@@ -15,7 +15,7 @@ public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository; // 유저 찾기용
 
-    // application.properties (or yml)에 정의된 만료시간 (예: 7일)
+    // yml에 정의된 만료시간 (예: 7일)
     @Value("${app.jwtRefreshExpirationMs}")
     private Long refreshTokenDurationMs;
 
