@@ -69,7 +69,4 @@ public class CustomerUserDetails implements UserDetails {
         return userEntity.getNickname();
     }
 
-    public Integer getUserID() {
-        return userEntity.getId();
-    }
 }
