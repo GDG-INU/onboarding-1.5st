@@ -25,6 +25,7 @@ public class CommentResponseDto {
         return CommentResponseDto.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
+                .boardId(comment.getBoard().getId())
                 .parentCommentId(comment.getParentComment() != null ? comment.getParentComment().getId() : null)
                 .likeCount(comment.getLikeCount())
                 .createdAt(comment.getCreatedAt())
