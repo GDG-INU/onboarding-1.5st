@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Controller
 @ResponseBody
-public class MainContoller {
+public class MainController {
 
     @GetMapping("/")
     public ResponseEntity<Map<String, String>> mainP(){
