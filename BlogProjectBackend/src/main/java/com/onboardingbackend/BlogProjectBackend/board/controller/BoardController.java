@@ -15,7 +15,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/board")
@@ -38,16 +41,18 @@ public class BoardController {
     // 게시글 삭제
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<Void> deleteBoard(@PathVariable Integer id){
-        boardService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Map<String, String>> deleteBoard(@PathVariable Integer id,@AuthenticationPrincipal CustomerUserDetails userDetails){
+        boardService.delete(id,userDetails.getEmail());
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "게시글이 삭제되었습니다.");
+        return ResponseEntity.ok(response);
     }
 
     // 게시글 수정
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<BoardResponseDto> updateBoard(@PathVariable Integer id, @RequestBody BoardRequestDto boardRequestDto){
-        BoardResponseDto response = boardService.update(id, boardRequestDto);
+    public ResponseEntity<BoardResponseDto> updateBoard(@PathVariable Integer id, @RequestBody BoardRequestDto boardRequestDto,@AuthenticationPrincipal CustomerUserDetails userDetails){
+        BoardResponseDto response = boardService.update(id, boardRequestDto,userDetails.getEmail());
         return ResponseEntity.ok(response);
     }
 
