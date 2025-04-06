@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface BoardRepository extends JpaRepository<Board, Integer> {
 
     @Modifying
-    @Query(value = "update Board b set b.viewCount = b.viewCount + 1 where b.id = :id")
+    @Query(value = "update Board b set b.viewCount = b.viewCount + 1 where b.id = :id")  //Race condition방지
     void incrementViewCount(@Param("id") Integer id);
 }

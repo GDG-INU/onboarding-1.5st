@@ -6,6 +6,11 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"board_id", "user_id"}) //중복방지
+        }
+)
 public class BoardLike {
 
     @Id

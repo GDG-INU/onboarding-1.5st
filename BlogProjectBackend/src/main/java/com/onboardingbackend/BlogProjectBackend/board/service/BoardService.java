@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,18 +59,30 @@ public class BoardService {
     }
 
     // 게시글 삭제
-    public void delete(Integer id){
+    public void delete(Integer id,String email){
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시물이 없습니다."));
+
+        // 🔐 작성자 검사
+        if (!board.getUser().getEmail().equals(email)) {
+            throw new AccessDeniedException("본인의 게시글만 삭제할 수 있습니다.");
+        }
         boardRepository.deleteById(id);
     }
 
     // 게시글 수정
-    public BoardResponseDto update(Integer id, BoardRequestDto boardRequestDto){
+    public BoardResponseDto update(Integer id, BoardRequestDto boardRequestDto,String email){
         try {
             Board board = boardRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("게시물이 없습니다."));
 
+            // 🔐 작성자 검사
+            if (!board.getUser().getEmail().equals(email)) {
+                throw new AccessDeniedException("본인의 게시글만 수정할 수 있습니다.");
+            }
+
             board.update(boardRequestDto);
-            boardRepository.save(board); // <- 명시적으로 save 호출
+            boardRepository.save(board);
 
             return new BoardResponseDto(board);
         } catch (ObjectOptimisticLockingFailureException e) {
