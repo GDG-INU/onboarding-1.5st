@@ -4,6 +4,7 @@ import com.onboardingbackend.BlogProjectBackend.comment.dto.req.CommentRequestDt
 import com.onboardingbackend.BlogProjectBackend.comment.dto.res.CommentResponseDto;
 import com.onboardingbackend.BlogProjectBackend.comment.service.CommentService;
 
+import com.onboardingbackend.BlogProjectBackend.signup.dto.CustomerUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,20 +34,22 @@ public class CommentController {
     // 댓글 삭제
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Boolean> deleteComment(
-            @PathVariable Integer commentId){
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.delete(commentId));
+            @PathVariable Integer commentId,
+            @AuthenticationPrincipal CustomerUserDetails userDetails){
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.delete(commentId,userDetails.getEmail()));
     }
 
     //댓글 수정
     @PutMapping("/{commentId}")
     public ResponseEntity<CommentResponseDto> updateComment(
             @PathVariable Integer commentId,
-            @RequestBody CommentRequestDto commentRequestDto){
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.update(commentId, commentRequestDto));
+            @RequestBody CommentRequestDto commentRequestDto,
+            @AuthenticationPrincipal CustomerUserDetails userDetails){
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.update(commentId, commentRequestDto,userDetails.getEmail()));
     }
 
-    @PostMapping("/comments/{commentId}/like")
-    public ResponseEntity<CommentResponseDto> likeComment(@PathVariable Integer commentId) {
-        return ResponseEntity.ok(commentService.likeComment(commentId));
+    @PostMapping("{commentId}/like")
+    public ResponseEntity<CommentResponseDto> likeComment(@PathVariable Integer commentId, @AuthenticationPrincipal CustomerUserDetails userDetails) {
+        return ResponseEntity.ok(commentService.toggleCommentlike(commentId,userDetails.getEmail()));
     }
 }
