@@ -3,9 +3,12 @@ package com.onboardingbackend.BlogProjectBackend.board.entity;
 import com.onboardingbackend.BlogProjectBackend.signup.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"board_id", "user_id"}) //중복방지
