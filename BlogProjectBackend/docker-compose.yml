@@ -12,7 +12,9 @@ services:    # 컨테이너 정의(컨테이너의 집합체를 보주로 서비
     volumes:
       - ./mysql-config/my.cnf:/etc/mysql/conf.d/my.cnf  # 설정 파일 마운트
   app:
-    build: .
+    build:
+      context: .            # Dockerfile 경로 (현재 디렉토리)
+      dockerfile: Dockerfile
     container_name: spring-app
     depends_on:
       - mysql

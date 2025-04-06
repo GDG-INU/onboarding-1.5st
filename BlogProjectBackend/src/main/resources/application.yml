@@ -5,7 +5,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/onboarding}
     username: root
-    password: ${SPRING_DATASOURCE_PASSWORD:1234}
+    password: ${SPRING_DATASOURCE_PASSWORD:ashuiydt9!}
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
